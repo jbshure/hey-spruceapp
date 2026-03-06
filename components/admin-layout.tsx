@@ -13,7 +13,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import AccountSettingsDialog from './account-settings-dialog';
 import {
   Home, Users, Building2, ClipboardList, FileText, Receipt,
-  Calendar, MessageSquare, LogOut, Menu, X, ShieldCheck, RotateCcw, Wrench, Tag, XCircle, ChevronDown, ChevronRight, BarChart2, Search, Package, Award
+  Calendar, MessageSquare, LogOut, Menu, X, ShieldCheck, RotateCcw, Wrench, Tag, XCircle, ChevronDown, ChevronRight, BarChart2, Search, Package, Award, TrendingUp
 } from 'lucide-react';
 import ViewControls from '@/components/view-controls';
 import GlobalSearchDialog from '@/components/global-search-dialog';
@@ -27,6 +27,7 @@ export default function AdminLayout({ children, headerExtra }: { children: React
   const [companiesExpanded, setCompaniesExpanded] = useState(true);
   const [workOrdersExpanded, setWorkOrdersExpanded] = useState(true);
   const [invoicesExpanded, setInvoicesExpanded] = useState(true);
+  const [crmExpanded, setCrmExpanded] = useState(true);
   const [badgeCounts, setBadgeCounts] = useState({
     locations: 0,
     workOrders: 0,
@@ -155,6 +156,13 @@ export default function AdminLayout({ children, headerExtra }: { children: React
     { name: 'Scheduled Invoices', href: '/admin-portal/scheduled-invoices', icon: Calendar },
   ];
 
+  const crmSubMenu = [
+    { name: 'Dashboard', href: '/admin-portal/crm', icon: TrendingUp },
+    { name: 'Contacts', href: '/admin-portal/crm/contacts', icon: Users },
+    { name: 'Companies', href: '/admin-portal/crm/companies', icon: Building2 },
+    { name: 'Deals', href: '/admin-portal/crm/deals', icon: TrendingUp },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Top Navigation */}
@@ -226,6 +234,37 @@ export default function AdminLayout({ children, headerExtra }: { children: React
               <Home className="h-5 w-5 flex-shrink-0" />
               <span>Dashboard</span>
             </Link>
+
+            {/* CRM Collapsible Section */}
+            <div>
+              <button
+                onClick={() => setCrmExpanded(!crmExpanded)}
+                className="w-full flex items-center gap-3 px-4 py-3 text-foreground rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors relative"
+              >
+                <TrendingUp className="h-5 w-5 flex-shrink-0" />
+                <span className="flex-1 text-left">CRM</span>
+                {crmExpanded ? (
+                  <ChevronDown className="h-4 w-4 flex-shrink-0" />
+                ) : (
+                  <ChevronRight className="h-4 w-4 flex-shrink-0" />
+                )}
+              </button>
+
+              {crmExpanded && (
+                <div className="ml-4 mt-1 space-y-1">
+                  {crmSubMenu.map((subItem) => (
+                    <Link
+                      key={subItem.name}
+                      href={subItem.href}
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-foreground rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      <subItem.icon className="h-4 w-4 flex-shrink-0" />
+                      <span>{subItem.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Users Collapsible Section */}
             <div>
@@ -469,6 +508,38 @@ export default function AdminLayout({ children, headerExtra }: { children: React
               <Home className="h-5 w-5 flex-shrink-0" />
               <span>Dashboard</span>
             </Link>
+
+            {/* CRM Collapsible Section - Mobile */}
+            <div>
+              <button
+                onClick={() => setCrmExpanded(!crmExpanded)}
+                className="w-full flex items-center gap-3 px-4 py-3 text-foreground rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors relative"
+              >
+                <TrendingUp className="h-5 w-5 flex-shrink-0" />
+                <span className="flex-1 text-left">CRM</span>
+                {crmExpanded ? (
+                  <ChevronDown className="h-4 w-4 flex-shrink-0" />
+                ) : (
+                  <ChevronRight className="h-4 w-4 flex-shrink-0" />
+                )}
+              </button>
+
+              {crmExpanded && (
+                <div className="ml-4 mt-1 space-y-1">
+                  {crmSubMenu.map((subItem) => (
+                    <Link
+                      key={subItem.name}
+                      href={subItem.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-foreground rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      <subItem.icon className="h-4 w-4 flex-shrink-0" />
+                      <span>{subItem.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Users Collapsible Section */}
             <div>
